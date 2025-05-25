@@ -15,21 +15,11 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [sessionId, setSessionId] = useState(generateSessionId());
   const [prompt, setPrompt] = useState('');
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   function generateSessionId() {
     return uuidv4(); 
   }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (prompt.trim() === '') return;  
-      const llmResponse = await sendMessageToLLM(sessionId, prompt); 
-      console.log('LLM Response:', llmResponse);
-    };
-
-    fetchData();
-  }, [prompt]);
 
   const sendMessageToLLM = async (sessionId, message) => {
     const headers = {
@@ -59,10 +49,8 @@ function App() {
       ...prevMessages,
       { role: 'user', content: prompt },
     ]);
-    console.log('User Message:', messages);
-    console.log('prompt:', prompt);
     setPrompt('');
-    setLoading(true); 
+    setLoading(true);
 
     const llmResponse = await sendMessageToLLM(sessionId, prompt);
 
@@ -85,16 +73,16 @@ function App() {
         <div>
           <div className="messages mb-4 space-y-4">
             {messages.map((message, index) => (
-              <div key={index} className={message.role === 'user' ? 'text-right ' : ' text-left'}>
-                {message.content}
+              <div key={index} className={message.role === 'user' ? 'text-right ' : ' text-left'} dangerouslySetInnerHTML={{ __html: message.content }} style={{ whiteSpace: 'pre-wrap' }}>
+                
               </div>
             ))}
-           {loading && (
-          <div className="flex justify-left items-center mt-4 gap-x-[15px]">
-            <span>AI đang phản hồi</span>
-            <div className="animate-spin w-4 h-4 border-4 border-t-4 border-blue-600 rounded-full border-t-transparent"></div>
-          </div>
-        )}
+            {loading && (
+              <div className="flex justify-left items-center mt-4 gap-x-[15px]">
+                <span>AI đang phản hồi</span>
+                <div className="animate-spin w-4 h-4 border-4 border-t-4 border-blue-600 rounded-full border-t-transparent"></div>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center w-full p-4 rounded-lg shadow-lg fixed bottom-0 left-0 mb-[20px] px-[100px]">
