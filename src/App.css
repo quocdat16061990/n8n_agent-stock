@@ -1,1 +1,9 @@
 @import "tailwindcss";
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+.svg-logo {
+    width: 20px;
+    background: oklch(37.3% 0.034 259.733);
+}
